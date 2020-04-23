@@ -1,0 +1,150 @@
+{% extends 'map_app/base.html' %}
+{% load static %}
+{% block content %}
+<br>
+<h1 class="text-center">United States Overview:</h1>
+<div class="text-center">
+    <img src="{% static 'images/vis_1_rough_draft.jpg' %}" alt="My image" height="70%" width="70%">
+</div>
+
+<hr>
+<h1 class="text-center">States with Dry Counties Overview:</h1>
+<hr>
+<div class="container-fluid">
+    <h2 class="text-center">Georgia</h2>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#GeorgiaModal">
+    Georgia Quick Facts
+    </button>
+    <br>
+  <!-- Modal -->
+    <div class="modal fade" id="GeorgiaModal" tabindex="-1" role="dialog" aria-labelledby="GeorgiaModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="GeorgiaModalLabel">Georgia</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+            Georgia Statistics:
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Done</button>
+            <!-- <button type="button" class="btn btn-primary">Done</button> -->
+            </div>
+        </div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-sm-6" id="georgia"></div>
+        <div class="col-sm-6" id="georgia_dots"></div>
+    </div>
+</div>
+
+<hr>
+
+<!-- <h2>Arkansas</h2> -->
+<div class="container-fluid">
+    <h2 class="text-center">Arkansas</h2>
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ArkansasModal">
+    Arkansas Quick Facts
+    </button>
+    <br>
+  <!-- Modal -->
+    <div class="modal fade" id="ArkansasModal" tabindex="-1" role="dialog" aria-labelledby="ArkansasModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="ArkansasModalLabel">Arkansas</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+            Arkansas Statistics:
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Done</button>
+            <!-- <button type="button" class="btn btn-primary">Done</button> -->
+            </div>
+        </div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-sm-6" id="arkansas"></div>
+        <div class="col-sm-6">Add Further Analysis</div>
+    </div>
+
+<hr>
+<!-- <h2>Kansas</h2> -->
+<div class="container-fluid">
+    <h2 class="text-center">Kansas</h2>
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#KansasModal">
+    Kansas Quick Facts
+    </button>
+    <br>
+  <!-- Modal -->
+    <div class="modal fade" id="KansasModal" tabindex="-1" role="dialog" aria-labelledby="KansasModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="KansasModalLabel">Kansas</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+            Kansas Statistics:
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Done</button>
+            <!-- <button type="button" class="btn btn-primary">Done</button> -->
+            </div>
+        </div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-sm-6" id="kansas"></div>
+        <div class="col-sm-6">Add Further Analysis</div>
+    </div>
+    <hr>
+    <h2 class="text-center">Coweta</h2>
+    <img src="{% static 'images/Coweta1.png' %}" alt="My image" height="70%" width="70%">
+    <img src="{% static 'images/Coweta2.png' %}" alt="My image" height="70%" width="70%">
+    <img src="{% static 'images/Coweta3.png' %}" alt="My image" height="70%" width="70%">
+    <hr>
+    <h2 class="text-center">Franklin</h2>
+    <img src="{% static 'images/Franklin1.png' %}" alt="My image" height="70%" width="70%">
+    <img src="{% static 'images/Franklin2.png' %}" alt="My image" height="70%" width="70%">
+    <img src="{% static 'images/Franklin3.png' %}" alt="My image" height="70%" width="70%">
+    <hr>
+    <h2 class="text-center">Jefferson</h2>
+    <img src="{% static 'images/Jefferson1.png' %}" alt="My image" height="70%" width="70%">
+    <img src="{% static 'images/Jefferson2.png' %}" alt="My image" height="70%" width="70%">
+    <img src="{% static 'images/Jefferson3.png' %}" alt="My image" height="70%" width="70%">
+<!-- Vega + Altair CDN -->
+<script src="https://cdn.jsdelivr.net/npm/vega@5.9.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-lite@4.0.2"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-embed@6.2.1"></script>
+<script type="application/javascript">
+    vegaEmbed('#georgia', "{% url 'georgia' %}");
+    vegaEmbed('#georgia_dots', "{% url 'georgia_advanced' %}");
+    vegaEmbed('#arkansas', "{% url 'arkansas' %}");
+    vegaEmbed('#kansas', "{% url 'kansas' %}");
+    vegaEmbed('#test', "{% static 'json/test_map.json' %}");
+</script>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+{% endblock content %}

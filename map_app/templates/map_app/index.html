@@ -1,0 +1,298 @@
+{% extends 'map_app/base.html' %}
+{% load static %}
+{% block content %}
+<!-- Vega + Altair CDN -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega@5"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega-lite@4"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega-embed@6"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<br>
+
+<div>
+    <h1 class="text-center">Introduction</h1>
+    <hr>
+    <p style = "text-indent : 4em;">
+        In 1932 Prohibition was repealed by President Roosevelt. Any federal law prohibiting the manufacturing, sales, distribution, or consumption of alcohol was removed.
+        However, the repeal still left the power to promote and enforce alcohol laws to individual states. It took more than three decades for statewide bans on alcohol sales
+        to be repealed after the official end of Prohibition.
+    </p>
+    <p style = "text-indent : 4em;">
+        The process of reintroducing alcohol was fragmented and resulted in many disparate and strange alcohol laws. For example, until 2014,
+        the sale of alcohol in South Carolina on election day was illegal. This law was rooted in concern over alcohol being used by politicians
+        as a bribe for votes - this concern was not unfounded. The Jack Daniel’s distillery is located in Tennessee in the middle of a “dry” county
+        where the sale of alcohol is not permitted. The only exception is the commemorative bottles which are sold in the Jack Daniel’s gift shop.
+        While most of the US allows for the sale and consumption of alcohol, there remain several states, generally in the southern US that still
+        retain a ban on alcohol. Several states have laws that restrict the type of alcohol that is sold, the hours during which it can be sold, or
+        the establishments where the sale is permitted.
+    </p>
+    <p style = "text-indent : 4em;">
+        Today there remain nine states with at least one “dry” county. Most of these are located in the Southern United States where religious
+        sentiment against drinking still has influence. While most states provide some method by which to have individual counties repeal prohibition;
+        the process can be arduous. In Arkansas 38% of voters are needed to sign a petition to qualify for a referendum to change local alcohol laws;
+        this is in stark contrast to the 15% which are needed for any other referendum.
+    </p>
+    <p style = "text-indent : 4em;">
+        The existence of this patchwork of laws governing alcohol consumption has some influence on overall alcohol use and, to a lesser extent,
+        the number of car accidents. The analysis conducted utilizes data from federal and state departments of transportation,
+        law enforcement agencies, traffic cameras, and traffic sensors within the road-networks to identify traffic accidents and analyze any
+        correlations between accident rates and the alcohol laws in a county. For the purposes of this analysis, dry counties are those counties
+        that do not serve alcohol at all within their boundaries.
+    </p>
+</div>
+<br>
+<h2 class="text-center">United States Overview</h2>
+<p style = "text-indent : 4em;">
+    Car accidents happen in every state. There are a variety of factors that impact the volume, severity, duration in any given car accident.
+    In this analysis we chose to investigate how alcohol could be impacting car accidents. Georgia, Arkansas, Kansas, Kentucky, Tennessee, Texas, and  Mississippi
+    are all states that maintain dry and wet counties. Our analysis narrows in on identifying accident differences between the counties in these states.
+</p>
+<hr>
+<!-- USA - VIS_1 -->
+<div class="text-center">
+    <img src="{% static 'images/vis_1_rough_draft.jpg' %}" alt="My image" height="70%" width="70%">
+</div>
+<hr>
+
+<!-- STATES - VIS_2 -->
+
+<h2 class="text-center">Dry vs. Wet Counties by State</h2>
+<p>
+    As you explore the data, you can see that wet counties tend to have a substantially higher amount of car accidents per 100 people.
+    However, dry counties tend to have a higher reported severity of accidents than wet counties do.
+</p>
+<form method="" action="" name="State" class="form-control form-control-lg">
+    <select id="selectState" size="1" name = "switch" onchange="switchImage();">
+        <option>Choose a state</option>
+    </select>
+    <script type = "text/javascript">
+        var select = document.getElementById("selectState");
+        var options = ['GA', 'AR', 'KS', 'KY', 'TN', 'TX', 'MS'];
+        var names = ['Georgia', 'Arkansas', 'Kansas', 'Kentucky', 'Tennessee', 'Texas', 'Mississippi']
+
+        for(var i = 0; i < options.length; i++) {
+            var opt = options[i];
+            var name = names[i];
+            var el = document.createElement("option");
+            el.textContent = name;
+            el.value = opt;
+            select.appendChild(el);
+        }
+        $(function() {
+        var temp="GA";
+        $("#selectState").val(temp);
+    });
+    </script>
+</form>
+
+<form method="" action="" name="Year" class="form-control form-control-lg">
+    <select id="selectYear" size="1" name = "switch" onchange="switchImage();">
+        <option>Choose a year</option>
+    </select>
+    <script type = "text/javascript">
+        var select = document.getElementById("selectYear");
+        var options = [2016, 2017, 2018, 2019];
+        var names = ['2016', '2017', '2018', '2019'];
+        for(var i = 0; i < options.length; i++) {
+            var opt = options[i];
+            var name = names[i];
+            var el = document.createElement("option");
+            el.textContent = name;
+            el.value = opt;
+            select.appendChild(el);
+        }
+        $(function() {
+        var temp=2016;
+        $("#selectYear").val(temp);
+    });
+    </script>
+</form>
+
+<form method="" action="" name="Variable" class="form-control form-control-lg">
+    <select id="selectVariable" size="1" name = "switch" onchange="switchImage();">
+        <option>Choose a statistic</option>
+    </select>
+    <script type = "text/javascript">
+        var select = document.getElementById("selectVariable");
+        var options = ['Severity', 'accidents per 100 people'];
+        var names = ['Severity of incident', 'Accidents per capita'];
+
+        for(var i = 0; i < options.length; i++) {
+            var opt = options[i];
+            var name = names[i];
+            var el = document.createElement("option");
+            el.textContent = name;
+            el.value = opt;
+            select.appendChild(el);
+        }
+        $(function() {
+        var temp='accidents per 100 people';
+        $("#selectVariable").val(temp);
+    });
+    </script>
+</form>
+<div id="test", class="image fit flush"></div>
+<hr>
+<script type="text/javascript">
+    vegaEmbed('#test', '/static/json/GA2016accidents per 100 people.json');
+</script>
+
+<!-- Scripts -->
+<script type="text/javascript">
+    function switchImage() {
+        var State = document.State.switch.options[document.State.switch.selectedIndex].value;
+        var Year = document.Year.switch.options[document.Year.switch.selectedIndex].value;
+        var Variable = document.Variable.switch.options[document.Variable.switch.selectedIndex].value;
+
+        console.log(State + Year.toString() +  Variable + ".json");
+
+        jsonSpec1_vis2 = ("static/json/"+State+Year.toString()+Variable +".json");
+        vegaEmbed('#test', jsonSpec1_vis2);
+    }
+</script>
+
+<!-- COUNTIES - VIS_3 -->
+<h2 class="text-center">Dry County Data</h2>
+<p>
+  To examine the effect of people driving across county borders to buy alcohol, we looked at 3 dry counties, Coweta, Franklin, GA and Jefferson, TN.
+  These three counties account for ~40% of the total data about dry counties in our dataset. As seen earlier, both dry and wet counties show increasing
+  severity of accidents at conventional drinking times (nighttime on weekends), but dry counties have higher rates throughout. While we would like to
+  point out that this is correlation, it does suggest a causal relationship between ban of alcohol sales and increased risk of accidents.
+</p>
+<ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#coweta">Coweta, GA</a></li>
+    <li><a data-toggle="tab" href="#franklin">Franklin, GA</a></li>
+    <li><a data-toggle="tab" href="#jefferson">Jefferson, TN</a></li>
+</ul>
+
+<div class="tab-content">
+    <div id="coweta" class="tab-pane fade in active">
+    <h3>Coweta, GA and surrounding counties</h3>
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#cowetaseverity">Severity</a></li>
+        <li><a data-toggle="tab" href="#cowetaduration">Duration</a></li>
+        <li><a data-toggle="tab" href="#cowetaaccidents">Accidents per capita</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="cowetaseverity" class="tab-pane fade in active">
+            <div id="vis1", class="image fit flush"></div>
+            <script type="text/javascript">
+                let jsonSpec1 = "static/json/Cowetaperiod_of_daySeverity.json";
+                vegaEmbed('#vis1', jsonSpec1);
+            </script>
+        </div>
+        <div id="cowetaduration" class="tab-pane fade">
+            <div id="vis2", class="image fit flush"></div>
+            <script type="text/javascript">
+                let jsonSpec2 = "static/json/Cowetaperiod_of_dayDuration.json";
+                vegaEmbed('#vis2', jsonSpec2);
+            </script>
+        </div>
+        <div id="cowetaaccidents" class="tab-pane fade">
+            <div id="vis3", class="image fit flush"></div>
+            <script type="text/javascript">
+                let jsonSpec3 = "static/json/Cowetaperiod_of_dayaccidents per 100 people.json";
+                vegaEmbed('#vis3', jsonSpec3);
+            </script>
+        </div>
+    </div>
+    </div>
+    <div id="franklin" class="tab-pane fade">
+        <h3>Franklin, GA and surrounding counties</h3>
+        <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#franklinseverity">Severity</a></li>
+        <li><a data-toggle="tab" href="#franklinduration">Duration</a></li>
+        <li><a data-toggle="tab" href="#franklinaccidents">Accidents per capita</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="franklinseverity" class="tab-pane fade in active">
+                <div id="vis4", class="image fit flush"></div>
+                <script type="text/javascript">
+                    let jsonSpec4 = "static/json/Franklinperiod_of_daySeverity.json";
+                    vegaEmbed('#vis4', jsonSpec4);
+                </script>
+            </div>
+            <div id="franklinduration" class="tab-pane fade">
+                <div id="vis5", class="image fit flush"></div>
+                <script type="text/javascript">
+                    let jsonSpec5 = "static/json/Franklinperiod_of_dayDuration.json";
+                    vegaEmbed('#vis5', jsonSpec5);
+                </script>
+            </div>
+            <div id="franklinaccidents" class="tab-pane fade">
+                <div id="vis6", class="image fit flush"></div>
+                <script type="text/javascript">
+                    let jsonSpec6 = "static/json/Franklinperiod_of_dayaccidents per 100 people.json";
+                    vegaEmbed('#vis6', jsonSpec6);
+                </script>
+            </div>
+        </div>
+    </div>
+    <div id="jefferson" class="tab-pane fade">
+        <h3>Jefferson, TN and surrounding counties</h3>
+        <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#jeffersonseverity">Severity</a></li>
+        <li><a data-toggle="tab" href="#jeffersonduration">Duration</a></li>
+        <li><a data-toggle="tab" href="#jeffersonaccidents">Accidents per capita</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="jeffersonseverity" class="tab-pane fade in active">
+                <div id="vis7", class="image fit flush"></div>
+                <script type="text/javascript">
+                    let jsonSpec7 = "static/json/Jeffersonperiod_of_daySeverity.json";
+                    vegaEmbed('#vis7', jsonSpec7);
+                </script>
+            </div>
+            <div id="jeffersonduration" class="tab-pane fade">
+                <div id="vis8", class="image fit flush"></div>
+                <script type="text/javascript">
+                    let jsonSpec8 = "static/json/Jeffersonperiod_of_dayDuration.json";
+                    vegaEmbed('#vis8', jsonSpec8);
+                </script>
+            </div>
+            <div id="jeffersonaccidents" class="tab-pane fade">
+                <div id="vis9", class="image fit flush"></div>
+                <script type="text/javascript">
+                    let jsonSpec9 = "static/json/Jeffersonperiod_of_dayaccidents per 100 people.json";
+                    vegaEmbed('#vis9', jsonSpec9);
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="text-center">
+    <h2>Conclusion</h2>
+    <hr>
+    <p>
+        Our analysis resulted in the conclusion that dry counties possess notably less weekly accidents than do wet counties. However,
+        this finding may be dependent on other factors, like population differences between dry and wet counties.
+    </p>
+</div>
+<hr>
+<div>
+  <h4>Citations</h4>
+  <ul>
+    <li> Schulte Gary, S. L., Aultman-Hall, L., McCourt, M., & Stamatiadis, N. (2003). Consideration of driver home county prohibition and alcohol-related
+    vehicle crashes. Accident Analysis & Prevention, 35(5), 641–648. https://doi.org/10.1016/S0001-4575(02)00042-8 </li>
+    <li> Staff, E. (n.d.). “Dry Towns” in the USA. Retrieved from Dec 30 2019 website: https://www.alcohol.org/statistics-information/dry-towns/ </li>
+    <li> A.V. (2018). Why America still had “dry” counties. Retrieved from The Economist website: https://www.economist.com/the-economist-explains/2018/06/05/why-america-still-has-dry-counties</li>
+    <li> Comen, E. (2019). These 9 States Still Have Dry Counties. Retrieved from https://247wallst.com/special-report/2019/12/12/states-that-still-have-dry-counties/</li>
+    <li>
+        Moosavi, Sobhan, Mohammad Hossein Samavatian, Srinivasan Parthasarathy, and Rajiv Ramnath. “A Countrywide Traffic Accident Dataset.”, arXiv preprint arXiv:1906.05409 (2019). URL: https://smoosavi.org/datasets/us_accidents
+    </li>
+    <li>
+        Moosavi, Sobhan, Mohammad Hossein Samavatian, Srinivasan Parthasarathy, Radu Teodorescu, and Rajiv Ramnath. “Accident Risk Prediction based on Heterogeneous Sparse Data: New Dataset and Insights.” In proceedings of the 27th ACM SIGSPATIAL International Conference on Advances in Geographic Information Systems, ACM, 2019.
+    </li>
+  </ul>
+</div>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+{% endblock content %}
